@@ -573,7 +573,7 @@
 <div class="toolbar">
   <div class="toolbar-inner">
     <span class="toolbar-label">Filter:</span>
-    <button class="f-btn active" data-filter="all">All (10)</button>
+    <button class="f-btn active" data-filter="all">All (9)</button>
     <button class="f-btn" data-filter="garage">🏗 Garage Parking</button>
     <button class="f-btn" data-filter="utilities">💡 Utilities Incl.</button>
     <button class="f-btn" data-filter="under2000">Under $2,000</button>
@@ -589,15 +589,15 @@
 
 <main>
   <div class="stats-row">
-    <div class="stat-card"><div class="sc-num amber" id="sTotal">10</div><div class="sc-lbl">Listed</div></div>
-    <div class="stat-card"><div class="sc-num green">$1,205</div><div class="sc-lbl">Lowest 1BR</div></div>
+    <div class="stat-card"><div class="sc-num amber" id="sTotal">9</div><div class="sc-lbl">Listed</div></div>
+    <div class="stat-card"><div class="sc-num green">$1,600</div><div class="sc-lbl">Lowest 1BR</div></div>
     <div class="stat-card"><div class="sc-num amber">$2,100</div><div class="sc-lbl">Highest 1BR</div></div>
     <div class="stat-card"><div class="sc-num teal">$1,849</div><div class="sc-lbl">Avg. Area 1BR</div></div>
     <div class="stat-card"><div class="sc-num amber" id="sGarage">6</div><div class="sc-lbl">Garage Options</div></div>
-    <div class="stat-card"><div class="sc-num green" id="sUtils">2</div><div class="sc-lbl">Utilities Incl.</div></div>
+    <div class="stat-card"><div class="sc-num green" id="sUtils">1</div><div class="sc-lbl">Utilities Incl.</div></div>
   </div>
 
-  <div class="result-meta" id="resMeta">Showing <span>10</span> of 10 properties</div>
+  <div class="result-meta" id="resMeta">Showing <span>9</span> of 9 properties</div>
 
   <div class="tbl-wrap">
     <table>
@@ -780,23 +780,6 @@ const data = [
     link: "https://maps.google.com/?cid=11041776456030911781",
     tags: ["garage", "under2000"]
   },
-  {
-    rank: 10,
-    name: "Germantown Place",
-    addr: "1100 4th Ave N, Nashville TN 37208",
-    priceMin: 1205,
-    priceMax: 1400,
-    priceStr: "From $1,205/mo",
-    parking: "surface",
-    parkingStr: "Surface / Lot",
-    util: "partial",
-    utilStr: "💡 Water, Trash & Sewer",
-    feats: ["Most Affordable", "Utilities Included", "Near Farmers Market", "Income Restrict. May Apply"],
-    badge: "budget",
-    badgeStr: "💚 Best Value",
-    link: "https://www.apartments.com/germantown-place-nashville-tn/d0q0cnl/",
-    tags: ["utilities", "under2000"]
-  }
 ];
 
 const tbody = document.getElementById('tbody');
@@ -851,7 +834,7 @@ function render() {
   tbody.innerHTML = '';
   cardList.innerHTML = '';
   emptyMsg.style.display = rows.length ? 'none' : 'block';
-  resMeta.innerHTML = `Showing <span>${rows.length}</span> of 10 properties`;
+  resMeta.innerHTML = `Showing <span>${rows.length}</span> of 9 properties`;
 
   rows.forEach((item, i) => {
     const delay = `${i * 0.04}s`;
