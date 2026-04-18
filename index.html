@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Germantown Nashville — Apartment Finder</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: #0f1117;
+    color: #e8eaf0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  header {
+    background: linear-gradient(135deg, #0d1520 0%, #111827 60%, #0f1a14 100%);
+    border-bottom: 1px solid #2a3145;
+    padding: 3.5rem 2rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #f0a842, transparent);
+  }
+  .eyebrow {
+    font-size: 0.68rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #38c9b5;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+  }
+  .eyebrow::before, .eyebrow::after {
+    content: '';
+    display: block;
+    height: 1px;
+    width: 40px;
+    background: #38c9b5;
+  }
+  h1 {
+    font-family: 'Libre Baskerville', serif;
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+  }
+  h1 em { font-style: italic; color: #f0a842; }
+  .header-desc {
+    font-size: 0.92rem;
+    color: #7a82a0;
+    max-width: 500px;
+    margin: 0 auto 2rem;
+    line-height: 1.7;
+  }
+  .header-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    justify-content: center;
+  }
+  .pill {
+    padding: 0.3rem 0.9rem;
+    border-radius: 2rem;
+    font-size: 0.73rem;
+    font-weight: 500;
+    border: 1px solid;
+  }
+  .p-amber { color: #f0a842; border-color: rgba(240,168,66,0.35); background: rgba(240,168,66,0.08); }
+  .p-teal  { color: #38c9b5; border-color: rgba(56,201,181,0.3);  background: rgba(56,201,181,0.07); }
+  .p-green { color: #4cbb8a; border-color: rgba(76,187,138,0.3);  background: rgba(76,187,138,0.07); }
+
+  /* CARDS */
+  main {
+    flex: 1;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  .card {
+    background: #1e2330;
+    border: 1px solid #2a3145;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  .card:hover { border-color: #f0a842; transform: translateY(-3px); }
+
+  .card-thumb {
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .thumb-map  { background: linear-gradient(135deg, #0d1f2d, #1a3a4a); }
+  .thumb-dash { background: linear-gradient(135deg, #1a1520, #2a1f38); }
+
+  /* Mini map SVG preview */
+  .map-preview { position: relative; width: 100%; height: 100%; }
+  .map-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(56,201,181,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(56,201,181,0.06) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  .map-roads {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    justify-content: space-around;
+    gap: 0;
+  }
+  .road-h { height: 1px; background: rgba(255,255,255,0.08); width: 100%; }
+  .road-v { width: 1px; background: rgba(255,255,255,0.08); height: 100%; position: absolute; top: 0; }
+  .map-dots {
+    position: absolute; inset: 0;
+  }
+  .mdot {
+    position: absolute;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 8px; font-weight: 700; color: #0f1117;
+    font-family: 'IBM Plex Sans', sans-serif;
+  }
+
+  .card-body { padding: 1.5rem; }
+  .card-label { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: #7a82a0; margin-bottom: 0.5rem; }
+  .card-title { font-family: 'Libre Baskerville', serif; font-size: 1.3rem; font-weight: 700; color: #e8eaf0; margin-bottom: 0.5rem; }
+  .card-desc { font-size: 0.82rem; color: #7a82a0; line-height: 1.6; margin-bottom: 1.2rem; }
+  .card-features { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1.5rem; }
+  .cf { font-size: 0.78rem; color: #b0b8d0; display: flex; align-items: center; gap: 0.5rem; }
+  .cf::before { content: '✓'; color: #38c9b5; font-weight: 700; font-size: 0.7rem; }
+  .card-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.4rem;
+    background: #f0a842;
+    color: #0f1117;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.82rem;
+    letter-spacing: 0.03em;
+    transition: background 0.15s;
+  }
+  .card:hover .card-cta { background: #e8b842; }
+
+  /* footer */
+  footer {
+    border-top: 1px solid #2a3145;
+    padding: 1.2rem 2rem;
+    text-align: center;
+    font-size: 0.72rem;
+    color: #7a82a0;
+  }
+  footer a { color: #f0a842; text-decoration: none; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Nashville, TN · Germantown · 37208</div>
+  <h1>Apartment Finder<br><em>for BCG Nashville</em></h1>
+  <p class="header-desc">Interactive tools for finding your perfect 1-bedroom in Germantown — prioritising indoor parking, utilities, and a short walk to the BCG office at 1320 Adams St.</p>
+  <div class="header-pills">
+    <span class="pill p-amber">🛏 1 Bedroom</span>
+    <span class="pill p-teal">🏗 Garage Parking</span>
+    <span class="pill p-green">💡 Utilities Included</span>
+    <span class="pill p-amber">📍 Germantown, Nashville</span>
+  </div>
+</header>
+
+<main>
+
+  <!-- MAP CARD -->
+  <a href="map.html" class="card">
+    <div class="card-thumb thumb-map">
+      <div class="map-preview">
+        <div class="map-grid"></div>
+        <!-- Stylised dot layout -->
+        <div class="map-dots">
+          <!-- BCG - center-ish -->
+          <div class="mdot" style="width:22px;height:22px;background:#f0a842;left:58%;top:42%;">BCG</div>
+          <!-- Neuhoff -->
+          <div class="mdot" style="width:14px;height:14px;background:#38c9b5;left:56%;top:46%;">2</div>
+          <!-- Griff -->
+          <div class="mdot" style="width:14px;height:14px;background:#7a82a0;left:59%;top:37%;">8</div>
+          <!-- Modera -->
+          <div class="mdot" style="width:14px;height:14px;background:#38c9b5;left:60%;top:33%;">7</div>
+          <!-- LC -->
+          <div class="mdot" style="width:14px;height:14px;background:#38c9b5;left:55%;top:52%;">5</div>
+          <!-- IMT -->
+          <div class="mdot" style="width:14px;height:14px;background:#38c9b5;left:54%;top:63%;">4</div>
+          <!-- Peyton -->
+          <div class="mdot" style="width:14px;height:14px;background:#38c9b5;left:46%;top:48%;">3</div>
+          <!-- Hamilton -->
+          <div class="mdot" style="width:14px;height:14px;background:#38c9b5;left:32%;top:51%;">1</div>
+          <!-- Werthan -->
+          <div class="mdot" style="width:14px;height:14px;background:#9b7fe8;left:26%;top:54%;">9</div>
+          <!-- Vista -->
+          <div class="mdot" style="width:14px;height:14px;background:#7a82a0;left:42%;top:66%;">6</div>
+          <!-- Germantown Place -->
+          <div class="mdot" style="width:14px;height:14px;background:#7a82a0;left:48%;top:70%;">10</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-label">Interactive Tool #1</div>
+      <div class="card-title">Proximity Map</div>
+      <div class="card-desc">All 10 apartments pinned on a live map relative to the BCG Nashville office. Click any marker for details, pricing, and a direct link to the listing.</div>
+      <div class="card-features">
+        <div class="cf">Walking radius circles (5 / 10 / 15 min)</div>
+        <div class="cf">Click markers for full apartment details</div>
+        <div class="cf">Colour-coded by parking type</div>
+        <div class="cf">Sidebar list with instant pan & zoom</div>
+      </div>
+      <span class="card-cta">Open Map →</span>
+    </div>
+  </a>
+
+  <!-- DASHBOARD CARD -->
+  <a href="dashboard.html" class="card">
+    <div class="card-thumb thumb-dash" style="padding: 1.5rem; align-items: flex-start; justify-content: flex-start;">
+      <div style="width:100%">
+        <div style="display:flex;gap:8px;margin-bottom:10px">
+          <div style="flex:1;height:38px;background:rgba(240,168,66,0.15);border:1px solid rgba(240,168,66,0.3);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:1rem;font-family:'Libre Baskerville',serif;color:#f0a842;font-weight:700;">10</div>
+          <div style="flex:1;height:38px;background:rgba(76,187,138,0.12);border:1px solid rgba(76,187,138,0.3);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:1rem;font-family:'Libre Baskerville',serif;color:#4cbb8a;font-weight:700;">6</div>
+          <div style="flex:1;height:38px;background:rgba(56,201,181,0.1);border:1px solid rgba(56,201,181,0.25);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:0.65rem;color:#38c9b5;font-weight:600;letter-spacing:0.05em;">$1,849</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;overflow:hidden">
+          <div style="background:#1e2330;padding:6px 10px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;">
+            <div style="font-size:0.58rem;color:#7a82a0;letter-spacing:0.1em;text-transform:uppercase">Property</div>
+            <div style="font-size:0.58rem;color:#7a82a0;letter-spacing:0.1em;text-transform:uppercase">Rent</div>
+            <div style="font-size:0.58rem;color:#7a82a0;letter-spacing:0.1em;text-transform:uppercase">Parking</div>
+          </div>
+          ${[
+            ['Neuhoff', '$1,706+', '🏗'],
+            ['The Griff', '$1,639+', '🚗'],
+            ['IMT Gtown', '$1,675+', '🏗'],
+            ['LC Gtown', '$1,600+', '🏗'],
+          ].map((r,i) => `
+            <div style="padding:5px 10px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;border-top:1px solid rgba(255,255,255,0.05);background:${i%2===0?'transparent':'rgba(255,255,255,0.02)'}">
+              <div style="font-size:0.65rem;color:#b0b8d0;font-weight:500">${r[0]}</div>
+              <div style="font-size:0.65rem;color:#38c9b5;font-weight:600">${r[1]}</div>
+              <div style="font-size:0.65rem;color:#7a82a0">${r[2]}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-label">Interactive Tool #2</div>
+      <div class="card-title">Apartment Dashboard</div>
+      <div class="card-desc">Full sortable, filterable table of all 10 apartments with live links to each listing. Filter by garage parking, utilities, price, and move-in specials.</div>
+      <div class="card-features">
+        <div class="cf">Filter by garage / utilities / price / specials</div>
+        <div class="cf">Sort by rank, price, or A–Z</div>
+        <div class="cf">Live "View ↗" links to every listing</div>
+        <div class="cf">Colour-coded pricing & parking badges</div>
+      </div>
+      <span class="card-cta">Open Dashboard →</span>
+    </div>
+  </a>
+
+</main>
+
+<footer>
+  Built April 2026 &nbsp;·&nbsp; Data verified from Apartments.com, ApartmentGuide, RentCafe &nbsp;·&nbsp;
+  <a href="https://www.bcg.com/offices/nashville" target="_blank">BCG Nashville ↗</a>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Germantown Apartments — Map</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=Libre+Baskerville:wght@700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'IBM Plex Sans', sans-serif; background: #0f1117; color: #e8eaf0; height: 100vh; display: flex; flex-direction: column; }
+
+  /* NAV */
+  nav {
+    background: #171b24;
+    border-bottom: 1px solid #2a3145;
+    padding: 0.8rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-shrink: 0;
+  }
+  .nav-logo { font-family: 'Libre Baskerville', serif; font-size: 1rem; color: #f0a842; font-weight: 700; }
+  .nav-sep { color: #2a3145; }
+  .nav-link {
+    font-size: 0.8rem;
+    color: #7a82a0;
+    text-decoration: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 2rem;
+    border: 1px solid #2a3145;
+    transition: all 0.15s;
+  }
+  .nav-link:hover { border-color: #f0a842; color: #f0a842; }
+  .nav-link.active { background: #f0a842; color: #0f1117; border-color: #f0a842; font-weight: 600; }
+  .nav-right { margin-left: auto; font-size: 0.75rem; color: #7a82a0; }
+
+  /* LAYOUT */
+  .layout { display: flex; flex: 1; overflow: hidden; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 300px;
+    flex-shrink: 0;
+    background: #171b24;
+    border-right: 1px solid #2a3145;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  .sidebar-header {
+    padding: 1.2rem 1.2rem 0.8rem;
+    border-bottom: 1px solid #2a3145;
+  }
+  .sidebar-title { font-family: 'Libre Baskerville', serif; font-size: 1rem; color: #f0a842; margin-bottom: 0.3rem; }
+  .sidebar-sub { font-size: 0.72rem; color: #7a82a0; line-height: 1.5; }
+
+  .legend { padding: 0.8rem 1.2rem; border-bottom: 1px solid #2a3145; display: flex; flex-direction: column; gap: 0.5rem; }
+  .legend-item { display: flex; align-items: center; gap: 0.6rem; font-size: 0.75rem; color: #b0b8d0; }
+  .legend-dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; border: 2px solid; }
+  .dot-bcg      { background: #f0a842; border-color: #fff; }
+  .dot-garage   { background: #38c9b5; border-color: #fff; }
+  .dot-covered  { background: #9b7fe8; border-color: #fff; }
+  .dot-surface  { background: #7a82a0; border-color: #fff; }
+
+  .apt-list { flex: 1; overflow-y: auto; }
+  .apt-item {
+    padding: 0.85rem 1.2rem;
+    border-bottom: 1px solid #1e2330;
+    cursor: pointer;
+    transition: background 0.12s;
+  }
+  .apt-item:hover { background: rgba(240,168,66,0.07); }
+  .apt-item.highlighted { background: rgba(240,168,66,0.12); border-left: 3px solid #f0a842; }
+  .apt-rank { font-size: 0.65rem; letter-spacing: 0.15em; color: #7a82a0; text-transform: uppercase; margin-bottom: 2px; }
+  .apt-name { font-size: 0.85rem; font-weight: 600; color: #e8eaf0; line-height: 1.3; margin-bottom: 3px; }
+  .apt-addr { font-size: 0.7rem; color: #7a82a0; margin-bottom: 5px; }
+  .apt-tags { display: flex; gap: 4px; flex-wrap: wrap; }
+  .tag { font-size: 0.62rem; padding: 1px 6px; border-radius: 3px; border: 1px solid; font-weight: 500; }
+  .tag-price  { color: #38c9b5; border-color: rgba(56,201,181,0.3); background: rgba(56,201,181,0.08); }
+  .tag-garage { color: #38c9b5; border-color: rgba(56,201,181,0.3); background: rgba(56,201,181,0.08); }
+  .tag-walk   { color: #f0a842; border-color: rgba(240,168,66,0.3); background: rgba(240,168,66,0.08); }
+  .tag-special{ color: #9b7fe8; border-color: rgba(155,127,232,0.3); background: rgba(155,127,232,0.08); }
+
+  /* BCG item */
+  .bcg-item {
+    padding: 0.85rem 1.2rem;
+    border-bottom: 1px solid #2a3145;
+    background: rgba(240,168,66,0.07);
+    border-left: 3px solid #f0a842;
+    cursor: pointer;
+  }
+  .bcg-label { font-size: 0.65rem; letter-spacing: 0.15em; color: #f0a842; text-transform: uppercase; margin-bottom: 2px; font-weight: 600; }
+  .bcg-name { font-size: 0.85rem; font-weight: 700; color: #f0a842; }
+  .bcg-addr { font-size: 0.7rem; color: #7a82a0; margin-top: 2px; }
+
+  /* MAP */
+  #map { flex: 1; }
+
+  /* Popup styles */
+  .leaflet-popup-content-wrapper {
+    background: #1e2330 !important;
+    border: 1px solid #2a3145 !important;
+    border-radius: 10px !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5) !important;
+    color: #e8eaf0 !important;
+  }
+  .leaflet-popup-tip { background: #1e2330 !important; }
+  .leaflet-popup-content { margin: 12px 16px !important; min-width: 220px; }
+  .popup-rank { font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase; color: #7a82a0; margin-bottom: 3px; }
+  .popup-name { font-size: 0.95rem; font-weight: 700; color: #e8eaf0; margin-bottom: 2px; line-height: 1.3; }
+  .popup-addr { font-size: 0.72rem; color: #7a82a0; margin-bottom: 8px; }
+  .popup-row { display: flex; gap: 6px; margin-bottom: 4px; align-items: center; }
+  .popup-label { font-size: 0.68rem; color: #7a82a0; width: 56px; flex-shrink: 0; }
+  .popup-val { font-size: 0.78rem; color: #e8eaf0; font-weight: 500; }
+  .popup-val.price { color: #38c9b5; }
+  .popup-val.garage { color: #38c9b5; }
+  .popup-walk { margin-top: 8px; padding: 5px 8px; background: rgba(240,168,66,0.1); border-radius: 5px; font-size: 0.72rem; color: #f0a842; font-weight: 500; }
+  .popup-bcg .popup-name { color: #f0a842; }
+  .popup-link { display: inline-block; margin-top: 10px; padding: 5px 12px; border: 1px solid rgba(240,168,66,0.4); border-radius: 4px; color: #f0a842; text-decoration: none; font-size: 0.72rem; font-weight: 600; transition: all 0.15s; }
+  .popup-link:hover { background: #f0a842; color: #0f1117; }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .sidebar { width: 100%; max-height: 40vh; }
+    .layout { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-logo">🏙 Germantown Nashville</span>
+  <span class="nav-sep">|</span>
+  <a href="index.html" class="nav-link">Home</a>
+  <a href="map.html" class="nav-link active">Map</a>
+  <a href="dashboard.html" class="nav-link">Dashboard</a>
+  <span class="nav-right">BCG Office + 10 Apartments</span>
+</nav>
+
+<div class="layout">
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-title">Proximity to BCG Nashville</div>
+      <div class="sidebar-sub">All 10 apartments within 15 min walk of BCG at 1320 Adams St.</div>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot dot-bcg"></div>BCG Nashville Office</div>
+      <div class="legend-item"><div class="legend-dot dot-garage"></div>Garage / Covered Parking</div>
+      <div class="legend-item"><div class="legend-dot dot-surface"></div>Surface Parking</div>
+    </div>
+
+    <div class="apt-list">
+      <div class="bcg-item" onclick="focusMarker('bcg')">
+        <div class="bcg-label">⭐ Your Office</div>
+        <div class="bcg-name">BCG Nashville</div>
+        <div class="bcg-addr">1320 Adams St, 11th Floor</div>
+      </div>
+      <!-- JS will inject apartment items here -->
+      <div id="aptListContainer"></div>
+    </div>
+  </div>
+
+  <div id="map"></div>
+</div>
+
+<script>
+const BCG = {
+  id: 'bcg',
+  name: 'BCG Nashville Office',
+  addr: '1320 Adams St, 11th Floor',
+  lat: 36.1805801,
+  lng: -86.7835777,
+  color: '#f0a842',
+  parking: 'office',
+  link: 'https://www.bcg.com/offices/nashville'
+};
+
+const apartments = [
+  { rank: 1,  name: 'The Hamilton & Hume House', addr: '601 Press Pl',       lat: 36.1786850, lng: -86.7920981, price: 'From ~$1,750/mo', parking: 'garage',  walk: '~12 min walk', special: '12 Wks Free', link: 'https://www.hamiltonandhumehouse.com/' },
+  { rank: 2,  name: 'Neuhoff Residences',        addr: '1315 Adams St',      lat: 36.1796040, lng: -86.7841681, price: 'From $1,706/mo',  parking: 'garage',  walk: '~2 min walk',  special: null,          link: 'https://www.neuhoffresidences.com/' },
+  { rank: 3,  name: 'Peyton Stakes',             addr: '1401 3rd Ave N',     lat: 36.1799812, lng: -86.7882900, price: '$1,721–$1,980',   parking: 'garage',  walk: '~7 min walk',  special: '8 Wks Free',  link: 'https://www.peytonstakes.com/' },
+  { rank: 4,  name: 'IMT Germantown',            addr: '1100 3rd Ave N',     lat: 36.1756777, lng: -86.7849128, price: '$1,675–$1,790',   parking: 'garage',  walk: '~7 min walk',  special: '2 Mo. Free',  link: 'https://imtresidential.com/properties/imt-germantown/' },
+  { rank: 5,  name: 'LC Germantown',             addr: '1220 2nd Ave N',     lat: 36.1777311, lng: -86.7846826, price: 'From ~$1,600/mo', parking: 'garage',  walk: '~5 min walk',  special: '2 Mo. Free',  link: 'https://www.lcgermantown.com/' },
+  { rank: 6,  name: 'Vista Germantown',          addr: '515 Madison St',     lat: 36.1747083, lng: -86.7886368, price: 'From $1,786/mo',  parking: 'surface', walk: '~10 min walk', special: '6 Wks Free',  link: 'https://www.vistagermantown.com/' },
+  { rank: 7,  name: 'Modera Riverview',          addr: '1410 Adams St',      lat: 36.1821173, lng: -86.7839626, price: 'From $1,677/mo',  parking: 'garage',  walk: '~2 min walk',  special: '2 Mo. Free',  link: 'https://www.moderariverview.com/' },
+  { rank: 8,  name: 'The Griff',                 addr: '1390 Adams St',      lat: 36.1814372, lng: -86.7836525, price: 'From $1,639/mo',  parking: 'surface', walk: '~1 min walk',  special: null,          link: 'https://www.thegriffapts.com/' },
+  { rank: 9,  name: 'Werthan Lofts',             addr: '1350 Rosa L Parks Blvd', lat: 36.1784973, lng: -86.7941478, price: 'From ~$1,700/mo', parking: 'covered', walk: '~14 min walk', special: null,        link: 'https://maps.google.com/?cid=11041776456030911781' },
+  { rank: 10, name: 'Germantown Place',          addr: '1100 4th Ave N',     lat: 36.1752608, lng: -86.7860133, price: 'From $1,205/mo',  parking: 'surface', walk: '~10 min walk', special: 'Best Value',  link: 'https://www.apartments.com/germantown-place-nashville-tn/d0q0cnl/' },
+];
+
+const parkingColor = { garage: '#38c9b5', covered: '#9b7fe8', surface: '#7a82a0', office: '#f0a842' };
+const markers = {};
+
+// Init map
+const map = L.map('map', { zoomControl: true }).setView([36.179, -86.786], 15);
+
+// Dark tile layer
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  attribution: '&copy; <a href="https://carto.com/">CARTO</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  maxZoom: 19
+}).addTo(map);
+
+function makeIcon(color, label, size = 36) {
+  return L.divIcon({
+    className: '',
+    html: `<div style="
+      width:${size}px; height:${size}px;
+      background:${color};
+      border-radius:50%;
+      border: 3px solid #fff;
+      display:flex; align-items:center; justify-content:center;
+      font-size:${size <= 36 ? '11' : '13'}px;
+      font-weight:700;
+      color:#0f1117;
+      font-family:'IBM Plex Sans',sans-serif;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.5);
+      cursor:pointer;
+    ">${label}</div>`,
+    iconSize: [size, size],
+    iconAnchor: [size/2, size/2],
+    popupAnchor: [0, -(size/2 + 4)]
+  });
+}
+
+// BCG marker
+const bcgMarker = L.marker([BCG.lat, BCG.lng], { icon: makeIcon('#f0a842', 'BCG', 42) })
+  .addTo(map)
+  .bindPopup(`
+    <div class="popup-bcg">
+      <div class="popup-rank">Your Office</div>
+      <div class="popup-name">BCG Nashville</div>
+      <div class="popup-addr">1320 Adams St, 11th Floor · Neuhoff District</div>
+      <div class="popup-row"><span class="popup-label">Phone</span><span class="popup-val">+1 615-492-6999</span></div>
+      <a class="popup-link" href="${BCG.link}" target="_blank">bcg.com/nashville ↗</a>
+    </div>
+  `);
+markers['bcg'] = bcgMarker;
+
+// Apartment markers
+apartments.forEach(apt => {
+  const color = parkingColor[apt.parking];
+  const marker = L.marker([apt.lat, apt.lng], { icon: makeIcon(color, apt.rank) })
+    .addTo(map)
+    .bindPopup(`
+      <div>
+        <div class="popup-rank">Apt #${apt.rank}</div>
+        <div class="popup-name">${apt.name}</div>
+        <div class="popup-addr">${apt.addr}, Nashville TN 37208</div>
+        <div class="popup-row"><span class="popup-label">1BR Rent</span><span class="popup-val price">${apt.price}</span></div>
+        <div class="popup-row"><span class="popup-label">Parking</span><span class="popup-val garage">${apt.parking === 'garage' ? '🏗 Garage' : apt.parking === 'covered' ? '🅿 Covered' : '🚗 Surface'}</span></div>
+        ${apt.special ? `<div class="popup-row"><span class="popup-label">Special</span><span class="popup-val" style="color:#9b7fe8">🎁 ${apt.special}</span></div>` : ''}
+        <div class="popup-walk">🚶 ${apt.walk} to BCG</div>
+        <a class="popup-link" href="${apt.link}" target="_blank">View listing ↗</a>
+      </div>
+    `);
+  markers[apt.rank] = marker;
+});
+
+// Build sidebar list
+const container = document.getElementById('aptListContainer');
+apartments.forEach(apt => {
+  const div = document.createElement('div');
+  div.className = 'apt-item';
+  div.id = `apt-item-${apt.rank}`;
+  div.innerHTML = `
+    <div class="apt-rank">Apt #${apt.rank}</div>
+    <div class="apt-name">${apt.name}</div>
+    <div class="apt-addr">${apt.addr}</div>
+    <div class="apt-tags">
+      <span class="tag tag-price">${apt.price}</span>
+      <span class="tag tag-garage">${apt.parking === 'garage' ? '🏗 Garage' : apt.parking === 'covered' ? '🅿 Covered' : '🚗 Surface'}</span>
+      <span class="tag tag-walk">${apt.walk}</span>
+      ${apt.special ? `<span class="tag tag-special">🎁 ${apt.special}</span>` : ''}
+    </div>
+  `;
+  div.onclick = () => focusMarker(apt.rank);
+  container.appendChild(div);
+});
+
+// Focus a marker
+function focusMarker(id) {
+  const marker = markers[id];
+  if (!marker) return;
+  map.flyTo(marker.getLatLng(), 17, { duration: 0.8 });
+  setTimeout(() => marker.openPopup(), 500);
+  // highlight sidebar
+  document.querySelectorAll('.apt-item').forEach(el => el.classList.remove('highlighted'));
+  const el = document.getElementById(`apt-item-${id}`);
+  if (el) { el.classList.add('highlighted'); el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+}
+
+// Draw walking radius circles from BCG
+[400, 800, 1200].forEach((meters, i) => {
+  const opacities = [0.18, 0.10, 0.06];
+  const labels   = ['5 min', '10 min', '15 min'];
+  L.circle([BCG.lat, BCG.lng], {
+    radius: meters,
+    color: '#f0a842',
+    fillColor: '#f0a842',
+    fillOpacity: opacities[i],
+    weight: i === 0 ? 1.5 : 1,
+    dashArray: '4 4',
+    interactive: false
+  }).addTo(map).bindTooltip(labels[i] + ' walk', { permanent: false, direction: 'top' });
+});
+</script>
+</body>
+</html>

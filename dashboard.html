@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Germantown Nashville — Apartment Finder</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  .site-nav {
+    background: #171b24;
+    border-bottom: 1px solid #2a3145;
+    padding: 0.8rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+  }
+  .site-nav-logo { font-family: 'Libre Baskerville', serif; font-size: 1rem; color: #f0a842; font-weight: 700; text-decoration: none; }
+  .site-nav-sep { color: #2a3145; }
+  .site-nav-link {
+    font-size: 0.8rem; color: #7a82a0; text-decoration: none;
+    padding: 0.3rem 0.8rem; border-radius: 2rem;
+    border: 1px solid #2a3145; transition: all 0.15s;
+    font-family: 'IBM Plex Sans', sans-serif;
+  }
+  .site-nav-link:hover { border-color: #f0a842; color: #f0a842; }
+  .site-nav-link.active { background: #f0a842; color: #0f1117; border-color: #f0a842; font-weight: 600; }
+</style>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #171b24;
+    --card: #1e2330;
+    --border: #2a3145;
+    --border-lite: #333d56;
+    --text: #e8eaf0;
+    --muted: #7a82a0;
+    --amber: #f0a842;
+    --amber-dim: rgba(240,168,66,0.15);
+    --teal: #38c9b5;
+    --teal-dim: rgba(56,201,181,0.12);
+    --red: #e05c5c;
+    --green: #4cbb8a;
+    --green-dim: rgba(76,187,138,0.12);
+    --purple: #9b7fe8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ——— HEADER ——— */
+  header {
+    background: linear-gradient(135deg, #0d1520 0%, #111827 50%, #0f1a14 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 2.5rem 2rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--amber), transparent);
+  }
+  .header-grid {
+    max-width: 1140px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 2rem;
+    align-items: start;
+  }
+  .header-eyebrow {
+    font-size: 0.68rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--teal);
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .header-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 24px;
+    height: 1px;
+    background: var(--teal);
+  }
+  header h1 {
+    font-family: 'Libre Baskerville', serif;
+    font-size: clamp(1.9rem, 4.5vw, 3rem);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 0.7rem;
+  }
+  header h1 em {
+    font-style: italic;
+    color: var(--amber);
+  }
+  .header-desc {
+    font-size: 0.88rem;
+    color: var(--muted);
+    max-width: 520px;
+    line-height: 1.65;
+  }
+  .header-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+  }
+  .pill {
+    padding: 0.3rem 0.85rem;
+    border-radius: 2rem;
+    font-size: 0.73rem;
+    font-weight: 500;
+    border: 1px solid;
+  }
+  .pill-amber { color: var(--amber); border-color: rgba(240,168,66,0.35); background: rgba(240,168,66,0.08); }
+  .pill-teal  { color: var(--teal);  border-color: rgba(56,201,181,0.3);  background: rgba(56,201,181,0.07); }
+  .pill-green { color: var(--green); border-color: rgba(76,187,138,0.3);  background: rgba(76,187,138,0.07); }
+  .header-stat-block {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.2rem 1.6rem;
+    text-align: center;
+    min-width: 140px;
+  }
+  .stat-big {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--amber);
+    line-height: 1;
+  }
+  .stat-label { font-size: 0.7rem; color: var(--muted); margin-top: 4px; letter-spacing: 0.1em; text-transform: uppercase; }
+
+  /* ——— TOOLBAR ——— */
+  .toolbar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(8px);
+  }
+  .toolbar-inner {
+    max-width: 1140px;
+    margin: 0 auto;
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .toolbar-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-right: 0.3rem;
+  }
+  .f-btn {
+    padding: 0.38rem 1rem;
+    border-radius: 2rem;
+    border: 1px solid var(--border-lite);
+    background: transparent;
+    cursor: pointer;
+    font-size: 0.78rem;
+    font-family: 'IBM Plex Sans', sans-serif;
+    color: var(--muted);
+    font-weight: 500;
+    transition: all 0.15s;
+  }
+  .f-btn:hover { border-color: var(--amber); color: var(--amber); }
+  .f-btn.active { background: var(--amber); color: #0f1117; border-color: var(--amber); font-weight: 600; }
+  .sort-sel {
+    margin-left: auto;
+    padding: 0.38rem 1rem;
+    border: 1px solid var(--border-lite);
+    border-radius: 2rem;
+    background: var(--card);
+    font-size: 0.78rem;
+    font-family: 'IBM Plex Sans', sans-serif;
+    color: var(--text);
+    cursor: pointer;
+    outline: none;
+  }
+  .sort-sel:focus { border-color: var(--amber); }
+
+  /* ——— MAIN ——— */
+  main {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 1.8rem 2rem;
+  }
+
+  /* ——— STATS ROW ——— */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 0.9rem;
+    margin-bottom: 1.8rem;
+  }
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.1rem;
+    text-align: center;
+    transition: border-color 0.2s;
+  }
+  .stat-card:hover { border-color: var(--border-lite); }
+  .sc-num {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .sc-num.amber { color: var(--amber); }
+  .sc-num.teal  { color: var(--teal); }
+  .sc-num.green { color: var(--green); }
+  .sc-lbl { font-size: 0.68rem; color: var(--muted); margin-top: 5px; letter-spacing: 0.08em; text-transform: uppercase; }
+
+  /* ——— RESULT META ——— */
+  .result-meta {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
+  .result-meta span { color: var(--text); font-weight: 600; }
+
+  /* ——— TABLE ——— */
+  .tbl-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  table { width: 100%; border-collapse: collapse; }
+  thead { background: var(--surface); border-bottom: 1px solid var(--border); }
+  thead th {
+    padding: 0.85rem 1.1rem;
+    text-align: left;
+    font-size: 0.66rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+  }
+  thead th:hover { color: var(--amber); }
+  thead th.sorted { color: var(--amber); }
+
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.12s;
+    animation: fadeUp 0.3s ease both;
+  }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: rgba(255,255,255,0.025); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  td { padding: 0.9rem 1.1rem; vertical-align: middle; }
+
+  /* rank cell */
+  .rank-cell {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--border-lite);
+    min-width: 32px;
+  }
+  .rank-cell.top3 { color: var(--amber); }
+
+  /* property */
+  .prop-name { font-weight: 600; font-size: 0.9rem; color: var(--text); line-height: 1.3; }
+  .prop-addr { font-size: 0.72rem; color: var(--muted); margin-top: 3px; }
+  .badge-special {
+    display: inline-block;
+    margin-top: 5px;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: rgba(240,168,66,0.18);
+    color: var(--amber);
+    border: 1px solid rgba(240,168,66,0.3);
+    padding: 2px 7px;
+    border-radius: 3px;
+    font-weight: 600;
+  }
+  .badge-budget {
+    display: inline-block;
+    margin-top: 5px;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: var(--green-dim);
+    color: var(--green);
+    border: 1px solid rgba(76,187,138,0.3);
+    padding: 2px 7px;
+    border-radius: 3px;
+    font-weight: 600;
+  }
+  .badge-historic {
+    display: inline-block;
+    margin-top: 5px;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: rgba(155,127,232,0.15);
+    color: var(--purple);
+    border: 1px solid rgba(155,127,232,0.3);
+    padding: 2px 7px;
+    border-radius: 3px;
+    font-weight: 600;
+  }
+
+  /* price */
+  .price {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .price.budget { color: var(--green); }
+  .price.mid    { color: var(--teal); }
+  .price.high   { color: var(--amber); }
+
+  /* parking */
+  .park-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .pk-garage  { background: var(--teal-dim); color: var(--teal); border: 1px solid rgba(56,201,181,0.25); }
+  .pk-surface { background: rgba(122,130,160,0.1); color: var(--muted); border: 1px solid var(--border); }
+  .pk-covered { background: rgba(240,168,66,0.1); color: var(--amber); border: 1px solid rgba(240,168,66,0.25); }
+
+  /* utilities */
+  .util-yes     { color: var(--green);  font-weight: 600; font-size: 0.82rem; }
+  .util-partial { color: var(--amber);  font-weight: 500; font-size: 0.82rem; }
+  .util-no      { color: var(--muted);  font-size: 0.82rem; }
+
+  /* features */
+  .feat-wrap { display: flex; flex-wrap: wrap; gap: 4px; max-width: 230px; }
+  .feat {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    font-size: 0.66rem;
+    padding: 2px 7px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  /* link btn */
+  .view-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0.4rem 1rem;
+    border: 1px solid rgba(240,168,66,0.4);
+    border-radius: 5px;
+    color: var(--amber);
+    text-decoration: none;
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    transition: all 0.15s;
+  }
+  .view-btn:hover { background: var(--amber); color: #0f1117; border-color: var(--amber); }
+
+  /* empty state */
+  .empty {
+    display: none;
+    text-align: center;
+    padding: 3rem;
+    color: var(--muted);
+  }
+
+  /* ——— FOOTNOTE ——— */
+  .footnote {
+    margin-top: 1.5rem;
+    padding: 1.1rem 1.4rem;
+    background: rgba(240,168,66,0.06);
+    border-left: 2px solid var(--amber);
+    border-radius: 0 8px 8px 0;
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+  .footnote strong { color: var(--text); }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .header-grid { grid-template-columns: 1fr; }
+    .header-stat-block { display: none; }
+  }
+  @media (max-width: 700px) {
+    main, .toolbar, header { padding-left: 1rem; padding-right: 1rem; }
+    td, th { padding: 0.7rem 0.75rem; }
+    .col-feat, .col-util { display: none; }
+  }
+</style>
+</head>
+<body>
+<nav class="site-nav">
+  <a href="index.html" class="site-nav-logo">🏙 Germantown Nashville</a>
+  <span class="site-nav-sep">|</span>
+  <a href="index.html" class="site-nav-link">Home</a>
+  <a href="map.html" class="site-nav-link">Map</a>
+  <a href="dashboard.html" class="site-nav-link active">Dashboard</a>
+</nav>
+
+<header>
+  <div class="header-grid">
+    <div>
+      <div class="header-eyebrow">Nashville, TN · 37208</div>
+      <h1>Germantown<br><em>Apartment Finder</em></h1>
+      <p class="header-desc">Top 10 one-bedroom rentals in Nashville's historic Germantown neighborhood — prioritising indoor/garage parking and utilities-included options. Verified April 2026.</p>
+      <div class="header-pills">
+        <span class="pill pill-amber">🛏 1 Bedroom</span>
+        <span class="pill pill-teal">🏗 Garage Parking Priority</span>
+        <span class="pill pill-green">💡 Utilities Included Priority</span>
+        <span class="pill pill-amber">📍 Historic Germantown</span>
+      </div>
+    </div>
+    <div class="header-stat-block">
+      <div class="stat-big">$1,849</div>
+      <div class="stat-label">Avg. 1BR Rent</div>
+    </div>
+  </div>
+</header>
+
+<div class="toolbar">
+  <div class="toolbar-inner">
+    <span class="toolbar-label">Filter:</span>
+    <button class="f-btn active" data-filter="all">All (10)</button>
+    <button class="f-btn" data-filter="garage">🏗 Garage Parking</button>
+    <button class="f-btn" data-filter="utilities">💡 Utilities Incl.</button>
+    <button class="f-btn" data-filter="under2000">Under $2,000</button>
+    <button class="f-btn" data-filter="specials">🎁 Move-in Specials</button>
+    <select class="sort-sel" id="sortSel">
+      <option value="rank">Sort: Rank</option>
+      <option value="price-asc">Price: Low → High</option>
+      <option value="price-desc">Price: High → Low</option>
+      <option value="alpha">A → Z</option>
+    </select>
+  </div>
+</div>
+
+<main>
+  <div class="stats-row">
+    <div class="stat-card"><div class="sc-num amber" id="sTotal">10</div><div class="sc-lbl">Listed</div></div>
+    <div class="stat-card"><div class="sc-num green">$1,205</div><div class="sc-lbl">Lowest 1BR</div></div>
+    <div class="stat-card"><div class="sc-num amber">$2,100</div><div class="sc-lbl">Highest 1BR</div></div>
+    <div class="stat-card"><div class="sc-num teal">$1,849</div><div class="sc-lbl">Avg. Area 1BR</div></div>
+    <div class="stat-card"><div class="sc-num amber" id="sGarage">6</div><div class="sc-lbl">Garage Options</div></div>
+    <div class="stat-card"><div class="sc-num green" id="sUtils">2</div><div class="sc-lbl">Utilities Incl.</div></div>
+  </div>
+
+  <div class="result-meta" id="resMeta">Showing <span>10</span> of 10 properties</div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Property</th>
+          <th>1BR Rent</th>
+          <th>Parking</th>
+          <th class="col-util">Utilities</th>
+          <th class="col-feat">Highlights</th>
+          <th>Listing</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+    <div class="empty" id="emptyMsg">No properties match this filter.</div>
+  </div>
+
+  <div class="footnote">
+    <strong>ℹ️ About Germantown Nashville:</strong> Germantown is Nashville's oldest suburb, bordered by the Cumberland River to the east and less than a mile from downtown. The neighborhood is on the <strong>National Register of Historic Places</strong> and blends Victorian-era architecture with modern luxury development. The average 1BR rent is <strong>~$1,849/mo</strong> (Apartments.com, 2026). <strong>All prices are base rent and subject to change</strong> — verify directly with properties. Move-in specials are time-limited; confirm before visiting.
+  </div>
+</main>
+
+<script>
+const data = [
+  {
+    rank: 1,
+    name: "The Hamilton & Hume House",
+    addr: "601 Press Pl, Nashville TN 37208",
+    priceMin: 1750,
+    priceMax: 2100,
+    priceStr: "From ~$1,750/mo",
+    parking: "garage",
+    parkingStr: "🏗 Garage Parking",
+    util: "no",
+    utilStr: "Not included",
+    feats: ["Rated #1 in Germantown", "Taylor Place Dev.", "Pool & Fitness", "Luxury Finishes"],
+    badge: "special",
+    badgeStr: "⭐ Top Rated",
+    link: "https://www.apartments.com/the-hamilton-and-hume-house-apartments-nashville-tn/",
+    tags: ["garage", "under2000", "specials"]
+  },
+  {
+    rank: 2,
+    name: "Neuhoff Residences",
+    addr: "1315 Adams St, Nashville TN 37208",
+    priceMin: 1706,
+    priceMax: 2200,
+    priceStr: "From $1,706/mo",
+    parking: "garage",
+    parkingStr: "🏗 Garage ($75/mo)",
+    util: "no",
+    utilStr: "Not included",
+    feats: ["Riverfront", "LEED Certified", "Historic Reuse", "Mixed-Use District"],
+    badge: "historic",
+    badgeStr: "🏛 Historic",
+    link: "https://www.apartments.com/neuhoff-residences-nashville-tn/0zvy4g2/",
+    tags: ["garage", "under2000"]
+  },
+  {
+    rank: 3,
+    name: "Peyton Stakes",
+    addr: "1401 3rd Ave N, Nashville TN 37208",
+    priceMin: 1721,
+    priceMax: 1980,
+    priceStr: "$1,721–$1,980/mo",
+    parking: "garage",
+    parkingStr: "🏗 Garage Parking",
+    util: "no",
+    utilStr: "Not included",
+    feats: ["Rooftop Deck", "Pool", "In-Unit W/D", "8 Weeks Free"],
+    badge: "special",
+    badgeStr: "🎁 8 Wks Free",
+    link: "https://www.apartments.com/peyton-stakes-nashville-tn/",
+    tags: ["garage", "under2000", "specials"]
+  },
+  {
+    rank: 4,
+    name: "IMT Germantown",
+    addr: "1100 3rd Ave N, Nashville TN 37208",
+    priceMin: 1675,
+    priceMax: 1790,
+    priceStr: "$1,675–$1,790/mo",
+    parking: "garage",
+    parkingStr: "🏗 Garage Parking",
+    util: "no",
+    utilStr: "Not included",
+    feats: ["Nest Thermostats", "In-Unit W/D", "Hardwood Floors", "2 Months Free"],
+    badge: "special",
+    badgeStr: "🎁 2 Mo. Free",
+    link: "https://www.apartments.com/imt-germantown-nashville-tn/",
+    tags: ["garage", "under2000", "specials"]
+  },
+  {
+    rank: 5,
+    name: "LC Germantown",
+    addr: "1220 2nd Ave N, Nashville TN 37208",
+    priceMin: 1600,
+    priceMax: 1900,
+    priceStr: "From ~$1,600/mo",
+    parking: "garage",
+    parkingStr: "🏗 Garage ($50/mo)",
+    util: "no",
+    utilStr: "Not included",
+    feats: ["Resort Pool", "The Goat Onsite", "Bark Park + Pet Spa", "2 Months Free"],
+    badge: "special",
+    badgeStr: "🎁 2 Mo. Free",
+    link: "https://www.apartments.com/lc-germantown-nashville-tn/synq107/",
+    tags: ["garage", "under2000", "specials"],
+    note: "⚠️ Parking reviews mixed — confirm availability"
+  },
+  {
+    rank: 6,
+    name: "Vista Germantown",
+    addr: "515 Madison St, Nashville TN 37208",
+    priceMin: 1786,
+    priceMax: 2000,
+    priceStr: "From $1,786/mo",
+    parking: "surface",
+    parkingStr: "Surface / Lot",
+    util: "no",
+    utilStr: "Not included",
+    feats: ["6 Weeks Free", "AC", "Fitness Center", "Pet Friendly"],
+    badge: "special",
+    badgeStr: "🎁 6 Wks Free",
+    link: "https://www.apartments.com/vista-germantown-nashville-tn/",
+    tags: ["under2000", "specials"]
+  },
+  {
+    rank: 7,
+    name: "Modera Riverview",
+    addr: "1410 Adams St, Nashville TN 37208",
+    priceMin: 1677,
+    priceMax: 1900,
+    priceStr: "From $1,677/mo",
+    parking: "garage",
+    parkingStr: "🏗 Covered Parking",
+    util: "no",
+    utilStr: "Not included",
+    feats: ["New Construction", "Riverfront Views", "Pool", "2 Months Free"],
+    badge: "special",
+    badgeStr: "🎁 2 Mo. Free",
+    link: "https://www.apartments.com/modera-riverview-nashville-tn/",
+    tags: ["garage", "under2000", "specials"]
+  },
+  {
+    rank: 8,
+    name: "The Griff",
+    addr: "1390 Adams St, Nashville TN 37208",
+    priceMin: 1639,
+    priceMax: 1850,
+    priceStr: "From $1,639/mo",
+    parking: "surface",
+    parkingStr: "Surface / Lot",
+    util: "no",
+    utilStr: "Not included",
+    feats: ["Price Drop Active", "Trendy Germantown", "Modern Finishes", "Pet Friendly"],
+    badge: null,
+    link: "https://www.apartments.com/the-griff-nashville-tn/",
+    tags: ["under2000"]
+  },
+  {
+    rank: 9,
+    name: "Werthan Lofts",
+    addr: "Werthan St, Nashville TN 37208",
+    priceMin: 1700,
+    priceMax: 2000,
+    priceStr: "From ~$1,700/mo",
+    parking: "covered",
+    parkingStr: "🅿 Gated Parking",
+    util: "no",
+    utilStr: "Not listed",
+    feats: ["Gated Community", "2 Pools", "Rooftop Terrace", "Bocce Ball Court"],
+    badge: "historic",
+    badgeStr: "🏛 Germantown Icon",
+    link: "https://www.homes.com/nashville-tn/germantown-neighborhood/apartments-for-rent/",
+    tags: ["garage", "under2000"]
+  },
+  {
+    rank: 10,
+    name: "Germantown Place",
+    addr: "1100 4th Ave N, Nashville TN 37208",
+    priceMin: 1205,
+    priceMax: 1400,
+    priceStr: "From $1,205/mo",
+    parking: "surface",
+    parkingStr: "Surface / Lot",
+    util: "partial",
+    utilStr: "💡 Water, Trash & Sewer",
+    feats: ["Most Affordable", "Utilities Included", "Near Farmers Market", "Income Restrict. May Apply"],
+    badge: "budget",
+    badgeStr: "💚 Best Value",
+    link: "https://www.apartments.com/germantown-place-nashville-tn/d0q0cnl/",
+    tags: ["utilities", "under2000"]
+  }
+];
+
+const tbody = document.getElementById('tbody');
+const emptyMsg = document.getElementById('emptyMsg');
+const resMeta = document.getElementById('resMeta');
+
+let curFilter = 'all';
+let curSort = 'rank';
+
+function priceClass(min) {
+  if (min < 1500) return 'budget';
+  if (min < 1850) return 'mid';
+  return 'high';
+}
+function parkClass(p) {
+  if (p === 'garage') return 'pk-garage';
+  if (p === 'covered') return 'pk-covered';
+  return 'pk-surface';
+}
+function utilClass(u) {
+  if (u === 'partial') return 'util-partial';
+  if (u === 'yes') return 'util-yes';
+  return 'util-no';
+}
+
+function renderBadge(item) {
+  if (!item.badge) return '';
+  if (item.badge === 'special')  return `<span class="badge-special">${item.badgeStr}</span>`;
+  if (item.badge === 'budget')   return `<span class="badge-budget">${item.badgeStr}</span>`;
+  if (item.badge === 'historic') return `<span class="badge-historic">${item.badgeStr}</span>`;
+  return '';
+}
+
+function getVisible() {
+  let d = [...data];
+  if (curFilter === 'garage')    d = d.filter(x => x.parking === 'garage' || x.parking === 'covered');
+  if (curFilter === 'utilities') d = d.filter(x => x.util !== 'no');
+  if (curFilter === 'under2000') d = d.filter(x => x.priceMin < 2000);
+  if (curFilter === 'specials')  d = d.filter(x => x.tags.includes('specials'));
+
+  if (curSort === 'price-asc')  d.sort((a,b) => a.priceMin - b.priceMin);
+  else if (curSort === 'price-desc') d.sort((a,b) => b.priceMin - a.priceMin);
+  else if (curSort === 'alpha') d.sort((a,b) => a.name.localeCompare(b.name));
+  else d.sort((a,b) => a.rank - b.rank);
+
+  return d;
+}
+
+function render() {
+  const rows = getVisible();
+  tbody.innerHTML = '';
+  emptyMsg.style.display = rows.length ? 'none' : 'block';
+  resMeta.innerHTML = `Showing <span>${rows.length}</span> of 10 properties`;
+
+  rows.forEach((item, i) => {
+    const tr = document.createElement('tr');
+    tr.style.animationDelay = `${i * 0.04}s`;
+    tr.innerHTML = `
+      <td><div class="rank-cell ${item.rank <= 3 ? 'top3' : ''}">${item.rank}</div></td>
+      <td>
+        <div class="prop-name">${item.name}</div>
+        <div class="prop-addr">${item.addr}</div>
+        ${renderBadge(item)}
+        ${item.note ? `<div style="font-size:0.66rem;color:#f0a842;margin-top:4px">${item.note}</div>` : ''}
+      </td>
+      <td><div class="price ${priceClass(item.priceMin)}">${item.priceStr}</div></td>
+      <td><span class="park-badge ${parkClass(item.parking)}">${item.parkingStr}</span></td>
+      <td class="col-util"><span class="${utilClass(item.util)}">${item.utilStr}</span></td>
+      <td class="col-feat">
+        <div class="feat-wrap">
+          ${item.feats.slice(0,4).map(f => `<span class="feat">${f}</span>`).join('')}
+        </div>
+      </td>
+      <td><a href="${item.link}" target="_blank" rel="noopener" class="view-btn">View ↗</a></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+document.querySelectorAll('.f-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.f-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    curFilter = btn.dataset.filter;
+    render();
+  });
+});
+
+document.getElementById('sortSel').addEventListener('change', e => {
+  curSort = e.target.value;
+  render();
+});
+
+render();
+</script>
+</body>
+</html>
