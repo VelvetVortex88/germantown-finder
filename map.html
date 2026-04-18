@@ -136,14 +136,14 @@
   <a href="index.html" class="nav-link">Home</a>
   <a href="map.html" class="nav-link active">Map</a>
   <a href="dashboard.html" class="nav-link">Dashboard</a>
-  <span class="nav-right">BCG Office + 10 Apartments</span>
+  <span class="nav-right">BCG Office + 9 Apartments</span>
 </nav>
 
 <div class="layout">
   <div class="sidebar">
     <div class="sidebar-header">
       <div class="sidebar-title">Proximity to BCG Nashville</div>
-      <div class="sidebar-sub">All 10 apartments within 15 min walk of BCG at 1320 Adams St.</div>
+      <div class="sidebar-sub">All 9 apartments within 15 min walk of BCG at 1320 Adams St.</div>
     </div>
 
     <div class="legend">
@@ -179,16 +179,15 @@ const BCG = {
 };
 
 const apartments = [
-  { rank: 1,  name: 'The Hamilton & Hume House', addr: '601 Press Pl',       lat: 36.1786850, lng: -86.7920981, price: 'From ~$1,750/mo', parking: 'garage',  walk: '~12 min walk', special: '12 Wks Free', link: 'https://www.hamiltonandhumehouse.com/' },
-  { rank: 2,  name: 'Neuhoff Residences',        addr: '1315 Adams St',      lat: 36.1796040, lng: -86.7841681, price: 'From $1,706/mo',  parking: 'garage',  walk: '~2 min walk',  special: null,          link: 'https://www.neuhoffresidences.com/' },
-  { rank: 3,  name: 'Peyton Stakes',             addr: '1401 3rd Ave N',     lat: 36.1799812, lng: -86.7882900, price: '$1,721–$1,980',   parking: 'garage',  walk: '~7 min walk',  special: '8 Wks Free',  link: 'https://www.peytonstakes.com/' },
-  { rank: 4,  name: 'IMT Germantown',            addr: '1100 3rd Ave N',     lat: 36.1756777, lng: -86.7849128, price: '$1,675–$1,790',   parking: 'garage',  walk: '~7 min walk',  special: '2 Mo. Free',  link: 'https://imtresidential.com/properties/imt-germantown/' },
-  { rank: 5,  name: 'LC Germantown',             addr: '1220 2nd Ave N',     lat: 36.1777311, lng: -86.7846826, price: 'From ~$1,600/mo', parking: 'garage',  walk: '~5 min walk',  special: '2 Mo. Free',  link: 'https://www.lcgermantown.com/' },
-  { rank: 6,  name: 'Vista Germantown',          addr: '515 Madison St',     lat: 36.1747083, lng: -86.7886368, price: 'From $1,786/mo',  parking: 'surface', walk: '~10 min walk', special: '6 Wks Free',  link: 'https://www.vistagermantown.com/' },
-  { rank: 7,  name: 'Modera Riverview',          addr: '1410 Adams St',      lat: 36.1821173, lng: -86.7839626, price: 'From $1,677/mo',  parking: 'garage',  walk: '~2 min walk',  special: '2 Mo. Free',  link: 'https://www.moderariverview.com/' },
-  { rank: 8,  name: 'The Griff',                 addr: '1390 Adams St',      lat: 36.1814372, lng: -86.7836525, price: 'From $1,639/mo',  parking: 'surface', walk: '~1 min walk',  special: null,          link: 'https://www.thegriffapts.com/' },
-  { rank: 9,  name: 'Werthan Lofts',             addr: '1350 Rosa L Parks Blvd', lat: 36.1784973, lng: -86.7941478, price: 'From ~$1,700/mo', parking: 'covered', walk: '~14 min walk', special: null,        link: 'https://maps.google.com/?cid=11041776456030911781' },
-  { rank: 10, name: 'Germantown Place',          addr: '1100 4th Ave N',     lat: 36.1752608, lng: -86.7860133, price: 'From $1,205/mo',  parking: 'surface', walk: '~10 min walk', special: 'Best Value',  link: 'https://www.apartments.com/germantown-place-nashville-tn/d0q0cnl/' },
+  { rank: 1,  name: 'The Hamilton & Hume House', addr: '601 Press Pl',           lat: 36.1786850, lng: -86.7920981, price: 'From ~$1,750/mo', parking: 'garage',  walk: '~12 min walk', special: '12 Wks Free', link: 'https://www.hamiltonandhumehouse.com/' },
+  { rank: 2,  name: 'Neuhoff Residences',        addr: '1315 Adams St',           lat: 36.1796040, lng: -86.7841681, price: 'From $1,706/mo',  parking: 'garage',  walk: '~2 min walk',  special: null,          link: 'https://www.neuhoffresidences.com/' },
+  { rank: 3,  name: 'Peyton Stakes',             addr: '1401 3rd Ave N',          lat: 36.1799812, lng: -86.7882900, price: '$1,721–$1,980',   parking: 'garage',  walk: '~7 min walk',  special: '8 Wks Free',  link: 'https://www.peytonstakes.com/' },
+  { rank: 4,  name: 'IMT Germantown',            addr: '1100 3rd Ave N',          lat: 36.1756777, lng: -86.7849128, price: '$1,675–$1,790',   parking: 'garage',  walk: '~7 min walk',  special: '2 Mo. Free',  link: 'https://imtresidential.com/properties/imt-germantown/' },
+  { rank: 5,  name: 'LC Germantown',             addr: '1220 2nd Ave N',          lat: 36.1777311, lng: -86.7846826, price: 'From ~$1,600/mo', parking: 'garage',  walk: '~5 min walk',  special: '2 Mo. Free',  link: 'https://www.lcgermantown.com/' },
+  { rank: 6,  name: 'Vista Germantown',          addr: '515 Madison St',          lat: 36.1747083, lng: -86.7886368, price: 'From $1,786/mo',  parking: 'surface', walk: '~10 min walk', special: '6 Wks Free',  link: 'https://www.vistagermantown.com/' },
+  { rank: 7,  name: 'Modera Riverview',          addr: '1410 Adams St',           lat: 36.1821173, lng: -86.7839626, price: 'From $1,677/mo',  parking: 'garage',  walk: '~2 min walk',  special: '2 Mo. Free',  link: 'https://www.moderariverview.com/' },
+  { rank: 8,  name: 'The Griff',                 addr: '1390 Adams St',           lat: 36.1814372, lng: -86.7836525, price: 'From $1,639/mo',  parking: 'surface', walk: '~1 min walk',  special: null,          link: 'https://www.thegriffapts.com/' },
+  { rank: 9,  name: 'Werthan Lofts',             addr: '1350 Rosa L Parks Blvd',  lat: 36.1784973, lng: -86.7941478, price: 'From ~$1,700/mo', parking: 'covered', walk: '~14 min walk', special: null,          link: 'https://maps.google.com/?cid=11041776456030911781' },
 ];
 
 const parkingColor = { garage: '#38c9b5', covered: '#9b7fe8', surface: '#7a82a0', office: '#f0a842' };
