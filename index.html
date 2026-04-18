@@ -258,18 +258,26 @@
             <div style="font-size:0.58rem;color:#7a82a0;letter-spacing:0.1em;text-transform:uppercase">Rent</div>
             <div style="font-size:0.58rem;color:#7a82a0;letter-spacing:0.1em;text-transform:uppercase">Parking</div>
           </div>
-          ${[
-            ['Neuhoff', '$1,706+', '🏗'],
-            ['The Griff', '$1,639+', '🚗'],
-            ['IMT Gtown', '$1,675+', '🏗'],
-            ['LC Gtown', '$1,600+', '🏗'],
-          ].map((r,i) => `
-            <div style="padding:5px 10px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;border-top:1px solid rgba(255,255,255,0.05);background:${i%2===0?'transparent':'rgba(255,255,255,0.02)'}">
-              <div style="font-size:0.65rem;color:#b0b8d0;font-weight:500">${r[0]}</div>
-              <div style="font-size:0.65rem;color:#38c9b5;font-weight:600">${r[1]}</div>
-              <div style="font-size:0.65rem;color:#7a82a0">${r[2]}</div>
-            </div>
-          `).join('')}
+          <div style="padding:5px 10px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;border-top:1px solid rgba(255,255,255,0.05);">
+            <div style="font-size:0.65rem;color:#b0b8d0;font-weight:500">Neuhoff</div>
+            <div style="font-size:0.65rem;color:#38c9b5;font-weight:600">$1,706+</div>
+            <div style="font-size:0.65rem;color:#7a82a0">🏗</div>
+          </div>
+          <div style="padding:5px 10px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;border-top:1px solid rgba(255,255,255,0.05);background:rgba(255,255,255,0.02)">
+            <div style="font-size:0.65rem;color:#b0b8d0;font-weight:500">The Griff</div>
+            <div style="font-size:0.65rem;color:#38c9b5;font-weight:600">$1,639+</div>
+            <div style="font-size:0.65rem;color:#7a82a0">🚗</div>
+          </div>
+          <div style="padding:5px 10px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;border-top:1px solid rgba(255,255,255,0.05);">
+            <div style="font-size:0.65rem;color:#b0b8d0;font-weight:500">IMT Gtown</div>
+            <div style="font-size:0.65rem;color:#38c9b5;font-weight:600">$1,675+</div>
+            <div style="font-size:0.65rem;color:#7a82a0">🏗</div>
+          </div>
+          <div style="padding:5px 10px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;border-top:1px solid rgba(255,255,255,0.05);background:rgba(255,255,255,0.02)">
+            <div style="font-size:0.65rem;color:#b0b8d0;font-weight:500">LC Gtown</div>
+            <div style="font-size:0.65rem;color:#38c9b5;font-weight:600">$1,600+</div>
+            <div style="font-size:0.65rem;color:#7a82a0">🏗</div>
+          </div>
         </div>
       </div>
     </div>
