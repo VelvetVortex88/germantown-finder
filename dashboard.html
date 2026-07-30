@@ -573,7 +573,7 @@
 <div class="toolbar">
   <div class="toolbar-inner">
     <span class="toolbar-label">Filter:</span>
-    <button class="f-btn active" data-filter="all">All (9)</button>
+    <button class="f-btn active" data-filter="all">All (16)</button>
     <button class="f-btn" data-filter="garage">🏗 Garage Parking</button>
     <button class="f-btn" data-filter="utilities">💡 Utilities Incl.</button>
     <button class="f-btn" data-filter="under2000">Under $2,000</button>
@@ -589,15 +589,15 @@
 
 <main>
   <div class="stats-row">
-    <div class="stat-card"><div class="sc-num amber" id="sTotal">9</div><div class="sc-lbl">Listed</div></div>
-    <div class="stat-card"><div class="sc-num green">$1,600</div><div class="sc-lbl">Lowest 1BR</div></div>
-    <div class="stat-card"><div class="sc-num amber">$2,100</div><div class="sc-lbl">Highest 1BR</div></div>
+    <div class="stat-card"><div class="sc-num amber" id="sTotal">16</div><div class="sc-lbl">Listed</div></div>
+    <div class="stat-card"><div class="sc-num green">$1,374</div><div class="sc-lbl">Lowest 1BR</div></div>
+    <div class="stat-card"><div class="sc-num amber">$2,500</div><div class="sc-lbl">Highest 1BR</div></div>
     <div class="stat-card"><div class="sc-num teal">$1,849</div><div class="sc-lbl">Avg. Area 1BR</div></div>
-    <div class="stat-card"><div class="sc-num amber" id="sGarage">6</div><div class="sc-lbl">Garage Options</div></div>
+    <div class="stat-card"><div class="sc-num amber" id="sGarage">12</div><div class="sc-lbl">Garage Options</div></div>
     <div class="stat-card"><div class="sc-num green" id="sUtils">1</div><div class="sc-lbl">Utilities Incl.</div></div>
   </div>
 
-  <div class="result-meta" id="resMeta">Showing <span>9</span> of 9 properties</div>
+  <div class="result-meta" id="resMeta">Showing <span>16</span> of 16 properties</div>
 
   <div class="tbl-wrap">
     <table>
@@ -780,6 +780,123 @@ const data = [
     link: "https://maps.google.com/?cid=11041776456030911781",
     tags: ["garage", "under2000"]
   },
+  {
+    rank: 10,
+    name: "The Flats at Taylor Place",
+    addr: "1515 5th Ave N, Nashville TN 37208",
+    priceMin: 1557,
+    priceMax: 3481,
+    priceStr: "From $1,557/mo",
+    parking: "garage",
+    parkingStr: "🏗 Garage (Free)",
+    util: "no",
+    utilStr: "Not included",
+    feats: ["Free Parking", "In-Unit W/D", "Rooftop Terrace", "Resort Pool"],
+    badge: "special",
+    badgeStr: "🎁 2 Mo. Free",
+    link: "https://www.flatsattaylorplace.com/",
+    tags: ["garage", "specials"]
+  },
+  {
+    rank: 11,
+    name: "Atlas Apartments at Germantown",
+    addr: "200 Madison St, Nashville TN 37208",
+    priceMin: 1511,
+    priceMax: 1654,
+    priceStr: "$1,511–$1,654/mo",
+    parking: "surface",
+    parkingStr: "Surface / Lot",
+    util: "no",
+    utilStr: "Not included",
+    feats: ["24-Hr Fitness", "Elevated Pool", "Boutique Style", "Pet Park"],
+    badge: null,
+    link: "https://www.atlasatgermantown.com/",
+    tags: []
+  },
+  {
+    rank: 12,
+    name: "Carillon",
+    addr: "1001 4th Ave N, Nashville TN 37219",
+    priceMin: 1542,
+    priceMax: 2815,
+    priceStr: "From $1,542/mo",
+    parking: "garage",
+    parkingStr: "🏗 Garage Parking",
+    util: "no",
+    utilStr: "Not included",
+    feats: ["Near Bicentennial Park", "Game Room", "Pool + Sun Deck", "Downtown Adjacent"],
+    badge: "special",
+    badgeStr: "🎁 2 Wks Free",
+    link: "https://www.liveatcarillon.com/",
+    tags: ["garage", "specials"]
+  },
+  {
+    rank: 13,
+    name: "909 Flats",
+    addr: "909 Rosa L Parks Blvd, Nashville TN 37208",
+    priceMin: 1422,
+    priceMax: 2200,
+    priceStr: "From $1,422/mo",
+    parking: "garage",
+    parkingStr: "🏗 Controlled Garage",
+    util: "no",
+    utilStr: "Not included",
+    feats: ["Guitar-Shaped Pool", "EV Charging", "Doggie Den", "Coffee Bar"],
+    badge: null,
+    link: "https://www.909flats.com/",
+    tags: ["garage"]
+  },
+  {
+    rank: 14,
+    name: "The Monroe",
+    addr: "1300 4th Ave N, Nashville TN 37208",
+    priceMin: 1374,
+    priceMax: 1820,
+    priceStr: "From $1,374/mo",
+    parking: "garage",
+    parkingStr: "🏗 Garage Parking",
+    util: "no",
+    utilStr: "Not included",
+    feats: ["Rooftop Sky Lounge", "Saltwater Pool", "Pub Lounge", "Best Value"],
+    badge: "budget",
+    badgeStr: "💚 Best Value",
+    link: "https://monroegermantown.com/",
+    tags: ["garage"]
+  },
+  {
+    rank: 15,
+    name: "Towne Nashville",
+    addr: "808 Garfield St, Nashville TN 37208",
+    priceMin: 1453,
+    priceMax: 1747,
+    priceStr: "$1,453–$1,747/mo",
+    parking: "garage",
+    parkingStr: "🏗 Garage Parking",
+    util: "no",
+    utilStr: "Not included",
+    feats: ["Open Floor Plans", "Dog Run", "Modern Kitchens", "Germantown Core"],
+    badge: null,
+    link: "https://townenashville.com/",
+    tags: ["garage"],
+    note: "⚠️ Reviews cite unmonitored garage access"
+  },
+  {
+    rank: 16,
+    name: "Modera Germantown",
+    addr: "1420 Adams St, Nashville TN 37208",
+    priceMin: 1800,
+    priceMax: 2500,
+    priceStr: "From $1,800/mo",
+    parking: "garage",
+    parkingStr: "🏗 Garage Parking",
+    util: "no",
+    utilStr: "Not included",
+    feats: ["Riverfront Views", "Sauna", "TRX + Peloton Gym", "New Construction"],
+    badge: "special",
+    badgeStr: "🎁 6 Wks Free",
+    link: "https://millcreekplaces.com/community/modera-germantown/",
+    tags: ["garage", "specials"]
+  }
 ];
 
 const tbody = document.getElementById('tbody');
@@ -834,7 +951,7 @@ function render() {
   tbody.innerHTML = '';
   cardList.innerHTML = '';
   emptyMsg.style.display = rows.length ? 'none' : 'block';
-  resMeta.innerHTML = `Showing <span>${rows.length}</span> of 9 properties`;
+  resMeta.innerHTML = `Showing <span>${rows.length}</span> of 16 properties`;
 
   rows.forEach((item, i) => {
     const delay = `${i * 0.04}s`;
